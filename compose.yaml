@@ -1,0 +1,29 @@
+name: logiflow
+services:
+  app:
+    build: .
+    image: logiflow:2.9.0
+    restart: unless-stopped
+    init: true
+    env_file:
+      - path: .env.docker
+        format: raw
+    environment:
+      DATABASE_URL: sqlite:////dados/logiflow.db
+      PORT: "8000"
+    ports:
+      - "${LOGIFLOW_BIND_IP:-127.0.0.1}:${LOGIFLOW_PORTA:-8000}:8000"
+    volumes:
+      - dados:/dados
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    stop_grace_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+volumes:
+  dados:

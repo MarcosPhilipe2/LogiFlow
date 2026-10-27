@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: logiflow
+    runtime: docker
+    plan: free
+    numInstances: 1
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /status
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: LOGIFLOW_ADMIN_USUARIO
+        sync: false
+      - key: LOGIFLOW_ADMIN_NOME
+        sync: false
+      - key: LOGIFLOW_ADMIN_SENHA
+        sync: false
+      - key: JWT_EXPIRE_MINUTES
+        value: "60"

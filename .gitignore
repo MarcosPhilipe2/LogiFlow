@@ -1,0 +1,37 @@
+# Ambiente virtual
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Banco de dados local (inclui os arquivos auxiliares do modo WAL)
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# Pacotes para instalação sem internet e resultados de teste de carga
+pacotes/
+resultados_carga*.json
+
+# Variáveis de ambiente
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Testes
+.pytest_cache/
+
+.env.docker
+.env.deploy
+backups/
+dados/
