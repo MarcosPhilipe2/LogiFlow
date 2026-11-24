@@ -76,3 +76,20 @@ def test_pedidos_por_dia(client, consulta, novo_pedido):
         {"data": hoje.isoformat(), "quantidade": 2},
     ]
     assert client.get("/dashboard/pedidos-por-dia?dias=0", headers=consulta).status_code == 422
+
+
+def test_filtro_pedidos_por_dia_usa_datetime_compativel_com_postgres():
+    """Evita comparar DATE com VARCHAR no PostgreSQL."""
+    from datetime import datetime
+    from unittest.mock import MagicMock
+
+    from app.services.dashboard import gerar_pedidos_por_dia
+
+    db = MagicMock()
+    db.query.return_value.filter.return_value.group_by.return_value.all.return_value = []
+
+    gerar_pedidos_por_dia(db, 7)
+
+    filtro = db.query.return_value.filter.call_args.args[0]
+    assert isinstance(filtro.right.value, datetime)
+    assert filtro.right.value == datetime.combine(date.today() - timedelta(days=6), datetime.min.time())
