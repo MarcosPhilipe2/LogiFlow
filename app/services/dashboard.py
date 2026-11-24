@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, datetime, time, timedelta
 
 from sqlalchemy import case, func
 from sqlalchemy.orm import Session
@@ -122,7 +122,7 @@ def gerar_pedidos_por_dia(db: Session, dias: int) -> list[PedidosPorDia]:
     dia = func.date(Pedido.criado_em)
     resultados = (
         db.query(dia.label("data"), func.count(Pedido.id).label("quantidade"))
-        .filter(dia >= inicio.isoformat())
+        .filter(Pedido.criado_em >= datetime.combine(inicio, time.min))
         .group_by(dia)
         .all()
     )
